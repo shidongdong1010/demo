@@ -17,13 +17,13 @@ public class WpsConverterUtil {
 	// word保存为pdf格式宏，值为17
 	private static final int wdFormatPDF = 17;
 
-	public static void doc2pdf(String srcFilePath, String pdfFilePath) {
+	public static void convert(String srcFilePath, String destFilePath) {
 		long startTime=System.currentTimeMillis();
 
-		File wordFile = new File(srcFilePath);
-		File pdfFile = new File(pdfFilePath);
-		if (pdfFile.exists()) {
-			pdfFile.delete();
+		File srcFile = new File(srcFilePath);
+		File destFile = new File(destFilePath);
+		if (destFile.exists()) {
+			destFile.delete();
 		}
 
 		ActiveXComponent wps = null;
@@ -32,22 +32,22 @@ public class WpsConverterUtil {
 		try {
 			wps = new ActiveXComponent("KWPS.Application");
 
-			doc = wps.invokeGetComponent("Documents").invokeGetComponent("Open", new Variant(wordFile.getAbsolutePath()));
+			doc = wps.invokeGetComponent("Documents").invokeGetComponent("Open", new Variant(srcFile.getAbsolutePath()));
 			try {
-				doc.invoke("SaveAs", new Variant(pdfFile.getAbsolutePath()), new Variant(wdFormatPDF));
+				doc.invoke("SaveAs", new Variant(destFile.getAbsolutePath()), new Variant(wdFormatPDF));
 			} catch (Exception e) {
 				logger.error("生成PDF失败", e);
 			}
 		} finally {
 			if (doc == null) {
-				logger.info("打开文件 " + wordFile.getAbsolutePath() + " 失败");
+				logger.info("打开文件 " + srcFile.getAbsolutePath() + " 失败");
 			} else {
 				try {
-					logger.info("释放文件 " + wordFile.getAbsolutePath());
+					logger.info("释放文件 " + srcFile.getAbsolutePath());
 					doc.invoke("Close");
 					doc.safeRelease();
 				} catch (Exception e1) {
-					logger.error("释放文件 " + wordFile.getAbsolutePath() + " 失败", e1);
+					logger.error("释放文件 " + srcFile.getAbsolutePath() + " 失败", e1);
 				}
 			}
 
@@ -63,6 +63,6 @@ public class WpsConverterUtil {
 				}
 			}
 		}
-		System.out.println("生成花费：" + ((System.currentTimeMillis() - startTime) / 1000) + "s.");
+		logger.info("生成花费：" + ((System.currentTimeMillis() - startTime) / 1000) + "s.");
 	}
 }

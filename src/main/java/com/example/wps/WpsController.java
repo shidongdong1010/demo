@@ -44,17 +44,17 @@ public class WpsController {
 		//String descAbsolutePath = fileBasePaht + File.separator + fileWps2PdfPath + File.separator + System.currentTimeMillis()+".pdf";
 
 		// 转换PDF
-		WpsConverterUtil.doc2pdf(srcAbsolutePath, descAbsolutePath);
+		WpsConverterUtil.convert(srcAbsolutePath, descAbsolutePath);
 
 		return descAbsolutePath;
 	}
 
 	/*
- * Java文件操作 获取不带扩展名的文件名
- *
- *  Created on: 2011-8-2
- *      Author: blueeagle
- */
+	 * Java文件操作 获取不带扩展名的文件名
+	 *
+	 *  Created on: 2011-8-2
+	 *      Author: blueeagle
+	 */
 	public static String getFileNameNoEx(String filename) {
 		if ((filename != null) && (filename.length() > 0)) {
 			int dot = filename.lastIndexOf('.');
